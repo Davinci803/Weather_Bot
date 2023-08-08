@@ -4,6 +4,11 @@ import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 
 public class WeatherApiClient {
     private static final String BASE_URL = "http://api.openweathermap.org/data/2.5/forecast";
@@ -32,5 +37,39 @@ public class WeatherApiClient {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        OkHttpClient jokeClient = new OkHttpClient();
+
+        Request jokeRequest = new Request.Builder()
+                .url("https://www.anekdot.ru/random/anekdot/")  // Используем другой источник русскоязычных анекдотов
+                .get()
+                .build();
+
+        try (Response jokeResponse = jokeClient.newCall(jokeRequest).execute()) {
+            if (jokeResponse.isSuccessful()) {
+                String jokeHtml = jokeResponse.body().string();
+                String joke = parseAnekdotRu(jokeHtml);
+                System.out.println("Анекдот дня: " + joke);
+            } else {
+                System.out.println("Ошибка при получении анекдота: " + jokeResponse.code());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Здесь заканчивается код для получения анекдотов
     }
+
+    private static String parseAnekdotRu(String html) {
+        Document document = Jsoup.parse(html);
+        Elements elements = document.select(".text");
+
+        if (!elements.isEmpty()) {
+            Element anekdotElement = elements.get(0);
+            return anekdotElement.text();
+        } else {
+            return "Не удалось получить анекдот.";
+        }
+    }
+
 }
