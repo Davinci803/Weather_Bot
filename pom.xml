@@ -18,6 +18,16 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.10.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version> <!-- Версия может быть актуализирована -->
+        </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.14.3</version> <!-- Версия может быть актуализирована -->
+        </dependency>
     </dependencies>
 
     <properties>
